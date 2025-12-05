@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Nelgak – My Reports{% endblock %}
+
+{% block content %}
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; gap:12px; flex-wrap:wrap;">
+    <div>
+      <h1 style="
+        font-size: 2rem;
+        font-weight: 700;
+        background: linear-gradient(to right,#047857,#0d9488);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        margin:0;
+      ">
+        My Reports
+      </h1>
+      <p style="color:#6b7280; margin-top:4px;">Manage items you've reported</p>
+    </div>
+
+    <a href="{% url 'report_item' %}" style="
+      background: linear-gradient(to right, #10b981, #0d9488);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 500;
+    ">
+      + New Report
+    </a>
+  </div>
+
+  <div style="margin-bottom: 16px; display:flex; gap:8px; flex-wrap:wrap;">
+    <span style="
+      padding:6px 12px;
+      border-radius:999px;
+      background:#ecfdf5;
+      color:#065f46;
+      font-size:0.9rem;
+    ">
+      All ({{ my_items.count }})
+    </span>
+    <span style="
+      padding:6px 12px;
+      border-radius:999px;
+      background:#fef9c3;
+      color:#854d0e;
+      font-size:0.9rem;
+    ">
+      Active ({{ active_items.count }})
+    </span>
+    <span style="
+      padding:6px 12px;
+      border-radius:999px;
+      background:#dcfce7;
+      color:#166534;
+      font-size:0.9rem;
+    ">
+      Found ({{ found_items.count }})
+    </span>
+  </div>
+
+  <h2 style="margin-top:20px;">All Reports</h2>
+  {% if my_items %}
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    ">
+      {% for item in my_items %}
+        {% include 'lostandfound/partials/item_card.html' with item=item %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>You haven't reported any items yet.</p>
+  {% endif %}
+
+  <h2 style="margin-top:40px;">Active (Not Found)</h2>
+  {% if active_items %}
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    ">
+      {% for item in active_items %}
+        {% include 'lostandfound/partials/item_card.html' with item=item %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>All your reported items are marked as found 🎉</p>
+  {% endif %}
+
+  <h2 style="margin-top:40px;">Found Items</h2>
+  {% if found_items %}
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    ">
+      {% for item in found_items %}
+        {% include 'lostandfound/partials/item_card.html' with item=item %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No found items yet.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block title %}Report Lost Item | Nelgak{% endblock %}
+
+{% block content %}
+<div style="
+    max-width: 800px;
+    margin: 0 auto;
+">
+  <div style="
+      background: white;
+      border-radius: 18px;
+      padding: 1.8rem 1.6rem;
+      box-shadow: 0 10px 30px rgba(15,118,110,0.08);
+      border: 1px solid #bbf7d0;
+  ">
+    <h1 style="
+        margin-top: 0;
+        font-size: 1.6rem;
+        font-weight: 700;
+        background: linear-gradient(to right, #047857, #0d9488);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.25rem;
+    ">
+      Report a Lost Item
+    </h1>
+    <p style="margin: 0 0 1.5rem 0; color:#4b5563; font-size:0.9rem;">
+      Fill in the details below so we can help you find your item faster.
+    </p>
+
+    {# global form errors #}
+    {% if form.non_field_errors %}
+      <div style="
+          background:#fee2e2;
+          border:1px solid #fecaca;
+          border-radius:10px;
+          padding:10px 12px;
+          margin-bottom:1rem;
+          color:#b91c1c;
+          font-size:0.85rem;
+      ">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div style="
+          display:grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem 1.2rem;
+      ">
+
+        <!-- Item name -->
+        <div style="grid-column: span 2;">
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Item name
+          </label>
+          {{ form.item_name }}
+          {% if form.item_name.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.item_name.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Category
+          </label>
+          {{ form.category }}
+          {% if form.category.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.category.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Location lost -->
+        <div>
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Location lost
+          </label>
+          {{ form.location_lost }}
+          {% if form.location_lost.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.location_lost.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Date lost -->
+        <div>
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Date lost
+          </label>
+          {{ form.date_lost }}
+          {% if form.date_lost.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.date_lost.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Optional image -->
+        <div style="grid-column: span 2;">
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Item photo (optional)
+          </label>
+
+          <input type="file"
+                name="image"
+                accept="image/*"
+                style="
+                  width:100%;
+                  padding:8px 10px;
+                  border-radius:10px;
+                  border:1px solid #a7f3d0;
+                  background:white;
+                  font-size:0.9rem;
+                  cursor:pointer;
+                ">
+
+          {% if form.image.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.image.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+
+        <!-- Description (full width) -->
+        <div style="grid-column: span 2;">
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Description
+          </label>
+          {{ form.description }}
+          <p style="margin:4px 0 0; font-size:0.8rem; color:#6b7280;">
+            Add any details that help identify the item (brand, color, unique marks…).
+          </p>
+          {% if form.description.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.description.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Contact name -->
+        <div>
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Your name
+          </label>
+          {{ form.contact_name }}
+          {% if form.contact_name.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.contact_name.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Contact email -->
+        <div>
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Email
+          </label>
+          {{ form.contact_email }}
+          {% if form.contact_email.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.contact_email.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Contact phone -->
+        <div>
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Phone
+          </label>
+          {{ form.contact_phone }}
+          {% if form.contact_phone.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.contact_phone.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Security question -->
+        <div style="grid-column: span 2; margin-top:0.5rem;">
+          <div style="
+              padding:0.75rem 0.9rem;
+              border-radius:12px;
+              background:#ecfdf5;
+              border:1px solid #bbf7d0;
+              margin-bottom:0.6rem;
+              font-size:0.85rem;
+              color:#065f46;
+          ">
+            <strong>Security question &amp; answer</strong><br>
+            This helps verify the real owner when someone tries to claim the item.
+          </div>
+
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Security question
+          </label>
+          {{ form.security_question }}
+          {% if form.security_question.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.security_question.errors|striptags }}
+            </div>
+          {% endif %}
+
+          <div style="height:0.5rem;"></div>
+
+          <label style="font-size:0.9rem; font-weight:600; color:#065f46; display:block; margin-bottom:4px;">
+            Security answer (expected correct answer)
+          </label>
+          {{ form.security_answer }}
+          {% if form.security_answer.errors %}
+            <div style="color:#b91c1c; font-size:0.8rem; margin-top:2px;">
+              {{ form.security_answer.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div style="margin-top:1.6rem; display:flex; gap:10px; align-items:center;">
+        <button type="submit"
+                style="
+                  padding:10px 18px;
+                  border-radius:999px;
+                  border:none;
+                  background:linear-gradient(to right,#10b981,#0d9488);
+                  color:white;
+                  font-weight:600;
+                  cursor:pointer;
+                  font-size:0.95rem;
+                ">
+          Submit Report
+        </button>
+
+        <a href="{% url 'home' %}"
+           style="
+             font-size:0.85rem;
+             color:#047857;
+             text-decoration:none;
+           ">
+          Cancel and go back
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .page input,
+  .page select,
+  .page textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #a7f3d0;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .page input:focus,
+  .page select:focus,
+  .page textarea:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 2px #bbf7d0;
+  }
+  .page textarea {
+    resize: vertical;
+  }
+</style>
+{% endblock %}

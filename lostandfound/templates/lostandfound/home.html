@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Nelgak – Browse Items{% endblock %}
+
+{% block content %}
+  <h1 style="margin-bottom: 16px;">Lost &amp; Found Items</h1>
+
+  <div class="filters-wrapper">
+  <form method="get" class="filters-form">
+    <div class="filters-row">
+      <!-- Search -->
+      <div class="filters-search">
+        <span class="filters-search-icon">🔍</span>
+        <input
+          type="text"
+          name="q"
+          placeholder="Search by name, description, or category"
+          value="{{ request.GET.q }}"
+        >
+      </div>
+
+      <!-- Status -->
+      <select name="status" class="filters-select">
+        <option value="all" {% if request.GET.status == 'all' or not request.GET.status %}selected{% endif %}>
+          All statuses
+        </option>
+        <option value="lost" {% if request.GET.status == 'lost' %}selected{% endif %}>Lost</option>
+        <option value="found" {% if request.GET.status == 'found' %}selected{% endif %}>Found</option>
+      </select>
+
+
+      <!-- Buttons -->
+      <button type="submit" class="filters-btn">
+        Apply
+      </button>
+
+      <!-- Optional: reset filters -->
+      <a href="{% url 'home' %}" class="filters-reset">Clear</a>
+    </div>
+  </form>
+</div>
+
+
+  <hr>
+
+  {% if items %}
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    ">
+      {% for item in items %}
+        {% include "lostandfound/partials/item_card.html" with item=item %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No items yet.</p>
+  {% endif %}
+
+  <style>
+  .filters-wrapper {
+    margin: 0 auto 1.5rem auto;
+    max-width: 980px;
+  }
+
+  .filters-form {
+    background: linear-gradient(to right, #ecfdf5, #d1fae5);
+    border-radius: 999px;
+    padding: 10px 14px;
+    border: 1px solid #a7f3d0;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.12);
+  }
+
+  .filters-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .filters-search {
+    flex: 1 1 260px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border-radius: 999px;
+    padding: 6px 10px;
+    border: 1px solid #a7f3d0;
+  }
+
+  .filters-search-icon {
+    font-size: 0.9rem;
+    color: #10b981;
+  }
+
+  .filters-search input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    background: transparent;
+  }
+
+  .filters-select {
+    flex: 0 0 150px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid #a7f3d0;
+    background: #f0fdf4;
+    font-size: 0.85rem;
+    color: #065f46;
+    outline: none;
+  }
+
+  .filters-select:focus,
+  .filters-search input:focus {
+    box-shadow: 0 0 0 2px #bbf7d0;
+    border-color: #10b981;
+  }
+
+  .filters-btn {
+    padding: 7px 18px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(to right, #10b981, #0d9488);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .filters-btn:hover {
+    filter: brightness(1.05);
+  }
+
+  .filters-reset {
+    font-size: 0.8rem;
+    color: #047857;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .filters-reset:hover {
+    text-decoration: underline;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .filters-form {
+      border-radius: 18px;
+    }
+    .filters-row {
+      align-items: stretch;
+    }
+    .filters-select,
+    .filters-btn,
+    .filters-reset {
+      flex: 1 1 100%;
+      text-align: center;
+    }
+    .filters-reset {
+      margin-top: -4px;
+    }
+  }
+</style>
+
+{% endblock %}

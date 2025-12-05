@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ item.item_name }} – NELGAK</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 2rem 0;
+        }
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .back-link {
+            text-decoration: none;
+            color: #059669;
+            font-size: 0.9rem;
+        }
+        .layout {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+            gap: 1.5rem;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1.6rem;
+            border: 1px solid #d1fae5;
+            box-shadow: 0 8px 20px rgba(15,118,110,0.08);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .item-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #064e3b;
+            margin: 0;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-found {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .badge-not-found {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        .item-description {
+            color: #4b5563;
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+        }
+        .meta-grid {
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .meta-label {
+            font-weight: 600;
+        }
+        .contact-card {
+            margin-top: 1.2rem;
+            padding: 1rem;
+            background: #ecfdf5;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .contact-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+            color: #065f46;
+            font-weight: 600;
+        }
+        .claim-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            color: #065f46;
+        }
+        .claim-subtitle {
+            font-size: 0.9rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        .field {
+            margin-bottom: 0.9rem;
+            font-size: 0.9rem;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 4px;
+            color: #065f46;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .field input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #a7f3d0;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .field input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px #a7f3d0;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(to right, #10b981, #0d9488);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .btn-primary:hover {
+            filter: brightness(0.97);
+        }
+        .message-list {
+            margin-top: 1rem;
+        }
+        .message {
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .message-success {
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+        .message-error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+        .claimed-info {
+            font-size: 0.9rem;
+            color: #374151;
+            margin-top: 0.6rem;
+        }
+        .security-office {
+            margin-top: 0.8rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+            font-size: 0.85rem;
+            color: #065f46;
+        }
+        .field-errors {
+            color: #b91c1c;
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <a href="{% url 'home' %}" class="back-link">← Back to all items</a>
+
+    {# Django messages (success / error from view) #}
+    {% if messages %}
+      <div class="message-list">
+        {% for message in messages %}
+          <div class="message {% if message.tags == 'success' %}message-success{% else %}message-error{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="layout">
+        <!-- Left: main item card -->
+        <div class="card">
+            <div class="card-header">
+                <h1 class="item-title">{{ item.item_name }}</h1>
+
+                {% if item.status == 'found' %}
+                    <span class="badge badge-found">Found / Claimed</span>
+                {% else %}
+                    <span class="badge badge-not-found">Not Found</span>
+                {% endif %}
+            </div>
+
+            <p class="item-description">
+                {{ item.description|default:"No description provided." }}
+            </p>
+
+            <div class="meta-grid">
+                <p>
+                    <span class="meta-label">Category:</span><br>
+                    {{ item.category }}
+                </p>
+                <p>
+                    <span class="meta-label">Location lost:</span><br>
+                    {{ item.location_lost }}
+                </p>
+                <p>
+                    <span class="meta-label">Date lost:</span><br>
+                    {{ item.date_lost }}
+                </p>
+                <p>
+                    <span class="meta-label">Reported on:</span><br>
+                    {{ item.created_at|date:"Y-m-d H:i" }}
+                </p>
+                <p>
+                    <span class="meta-label">Building:</span><br>
+                    {{ item.building_number|default:"A60" }}
+                </p>
+                <p>
+                    <span class="meta-label">College:</span><br>
+                    {{ item.college|default:"CCIS" }}
+                </p>
+            </div>
+
+            <div class="contact-card">
+                <h2 class="contact-title">Contact information</h2>
+                <p>
+                    <strong>Name:</strong> {{ item.contact_name }}<br>
+                    {% if item.contact_email %}
+                      <strong>Email:</strong> {{ item.contact_email }}<br>
+                    {% endif %}
+                    {% if item.contact_phone %}
+                      <strong>Phone:</strong> {{ item.contact_phone }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Right: claim card / claimed info -->
+        <div class="card">
+            {% if item.status == 'found' %}
+                <h2 class="claim-title">Item already claimed</h2>
+                <p class="claim-subtitle">
+                    This item has already been verified and claimed by its owner.
+                </p>
+                <div class="security-office">
+                    Please contact the security office in building
+                    <strong>{{ item.building_number|default:"A60" }}</strong>
+                    if you have any questions.
+                </div>
+            {% else %}
+                <h2 class="claim-title">Is this your item?</h2>
+                <p class="claim-subtitle">
+                    Answer the security question to verify ownership. If your answer matches, the item’s status will change
+                    to <strong>Found</strong>, and you’ll be asked to go to building security to pick it up.
+                </p>
+
+                {% if item.security_question %}
+                  <p style="font-size:0.9rem; margin-bottom:0.75rem;">
+                    <strong>Security question:</strong><br>
+                    {{ item.security_question }}
+                  </p>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="field">
+                        <label for="{{ form.claimer_name.id_for_label }}">Your name</label>
+                        {{ form.claimer_name }}
+                        {% if form.claimer_name.errors %}
+                          <div class="field-errors">
+                            {{ form.claimer_name.errors|striptags }}
+                          </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.claimer_email.id_for_label }}">Your email</label>
+                        {{ form.claimer_email }}
+                        {% if form.claimer_email.errors %}
+                          <div class="field-errors">
+                            {{ form.claimer_email.errors|striptags }}
+                          </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.answer.id_for_label }}">Your answer</label>
+                        {{ form.answer }}
+                        {% if form.answer.errors %}
+                          <div class="field-errors">
+                            {{ form.answer.errors|striptags }}
+                          </div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                      <div class="field-errors" style="margin-bottom:0.5rem;">
+                        {{ form.non_field_errors|striptags }}
+                      </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn-primary">Submit Answer</button>
+                </form>
+
+                <div class="security-office">
+                If verified, you will be instructed to visit the security office to collect your item.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account – Nelgak{% endblock %}
+
+{% block content %}
+  <div style="
+      max-width:450px;
+      margin:40px auto;
+      padding:30px;
+      background:white;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.06);
+      border:1px solid #bbf7d0;
+  ">
+    <h2 style="
+        font-size:1.6rem;
+        font-weight:700;
+        margin-bottom:10px;
+        background:linear-gradient(to right,#047857,#0d9488);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+    ">Create an Account</h2>
+
+    <p style="color:#4b5563; margin-bottom:20px;">
+      Use your official IAU email (<strong>@iau.edu.sa</strong>) to register.
+    </p>
+
+    {% if form.errors %}
+      <div style="
+          background:#fee2e2;
+          border:1px solid #fecaca;
+          padding:12px;
+          border-radius:10px;
+          margin-bottom:20px;
+          color:#b91c1c;
+      ">
+        Please correct the errors below.
+      </div>
+    {% endif %}
+
+    <form method="post" style="display:flex; flex-direction:column; gap:15px;">
+      {% csrf_token %}
+
+      <div>
+        <label style="font-weight:600; color:#065f46;">Username</label>
+        {{ form.username }}
+      </div>
+
+      <div>
+        <label style="font-weight:600; color:#065f46;">IAU Email</label>
+        {{ form.email }}
+      </div>
+
+      <div>
+        <label style="font-weight:600; color:#065f46;">Password</label>
+        {{ form.password1 }}
+      </div>
+
+      <div>
+        <label style="font-weight:600; color:#065f46;">Confirm Password</label>
+        {{ form.password2 }}
+      </div>
+
+      <button type="submit" style="
+          margin-top:10px;
+          padding:10px;
+          border-radius:999px;
+          border:none;
+          background:linear-gradient(to right,#10b981,#0d9488);
+          color:white;
+          font-size:1rem;
+          font-weight:600;
+          cursor:pointer;
+      ">
+        Register
+      </button>
+    </form>
+
+    <p style="margin-top:15px; text-align:center; color:#374151;">
+      Already have an account?
+      <a href="{% url 'login' %}" style="color:#0d9488; font-weight:600;">Login</a>
+    </a>
+  </div>
+{% endblock %}

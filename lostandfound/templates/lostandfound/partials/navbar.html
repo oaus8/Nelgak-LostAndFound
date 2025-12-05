@@ -1,0 +1,105 @@
+<header style="background:#ecfdf5; border-bottom:1px solid #bbf7d0;">
+  <div style="
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  ">
+    <!-- Brand -->
+    <div style="
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #047857, #0d9488);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    ">
+      Nelgak
+    </div>
+
+    <!-- Nav buttons -->
+    <nav style="display:flex; gap:8px; flex-wrap:wrap;">
+
+      <!-- Browse All -->
+      <a href="{% url 'home' %}"
+         style="
+           padding:8px 14px;
+           border-radius:999px;
+           text-decoration:none;
+           font-weight:500;
+           color:#065f46;
+           background:{% if request.resolver_match.url_name == 'home' %}#4ade80{% else %}#bbf7d0{% endif %};
+           transition:background 0.15s ease;
+         ">
+        Browse All Items
+      </a>
+
+      <!-- Report Item -->
+      <a href="{% url 'report_item' %}"
+         style="
+           padding:8px 14px;
+           border-radius:999px;
+           text-decoration:none;
+           font-weight:500;
+           color:#065f46;
+           background:{% if request.resolver_match.url_name == 'report_item' %}#4ade80{% else %}#bbf7d0{% endif %};
+           transition:background 0.15s ease;
+         ">
+        Report Item
+      </a>
+
+      <!-- My Reports -->
+      {% if user.is_authenticated %}
+      <a href="{% url 'my_reports' %}"
+         style="
+           padding:8px 14px;
+           border-radius:999px;
+           text-decoration:none;
+           font-weight:500;
+           color:#065f46;
+           background:{% if request.resolver_match.url_name == 'my_reports' %}#4ade80{% else %}#bbf7d0{% endif %};
+           transition:background 0.15s ease;
+         ">
+        My Reports
+      </a>
+      {% endif %}
+
+      <!-- Auth buttons -->
+      {% if user.is_authenticated %}
+        <!-- POST form for logout -->
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit"
+                  style="
+                    padding:8px 14px;
+                    border-radius:999px;
+                    font-weight:500;
+                    color:#065f46;
+                    background:#bbf7d0;
+                    border:none;
+                    cursor:pointer;
+                  ">
+            Logout
+          </button>
+        </form>
+      {% else %}
+        <a href="{% url 'register' %}"
+           style="
+             padding:8px 14px;
+             border-radius:999px;
+             text-decoration:none;
+             font-weight:500;
+             color:#065f46;
+             background:{% if request.resolver_match.url_name == 'register' %}#4ade80{% else %}#bbf7d0{% endif %};
+             transition:background 0.15s ease;
+           ">
+          Register
+        </a>
+      {% endif %}
+
+    </nav>
+  </div>
+</header>
