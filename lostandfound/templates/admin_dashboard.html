@@ -31,11 +31,6 @@
       <p class="value">{{ found_reports }}</p>
     </div>
 
-    <div class="admin-stat-card claimed">
-      <p class="label">Claimed</p>
-      <p class="value">{{ claimed_reports }}</p>
-    </div>
-
     <div class="admin-stat-card today">
       <p class="label">New today</p>
       <p class="value">{{ today_reports }}</p>
@@ -119,6 +114,9 @@
                   <a href="{% url 'item_detail' item.pk %}" class="btn-small">
                     View
                   </a>
+                  <a href="{% url 'edit_item' item.pk %}" class="btn-small2">
+                    Edit
+                  </a>
                   <form method="POST" action="{% url 'delete_item' item.pk %}" 
                         style="display:inline-block;" 
                         onsubmit="return confirm('Are you sure you want to delete this item? This cannot be undone.');">
@@ -180,7 +178,7 @@
   /* Stats cards */
   .admin-stats-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     gap: 0.9rem;
     margin-bottom: 1.6rem;
   }
@@ -359,15 +357,27 @@
     text-decoration: none;
     font-weight: 500;
   }
+  .btn-small2 {
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: none;
+    background: #fffbeb; /* Very pale yellow */
+    color: #b45309;      /* Deep, readable amber/brown */
+    font-size: 0.8rem;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+  }
   .btn-delete {
     padding: 5px 10px;
     border-radius: 999px;
     border: none;
-    background: #ed6262;
-    color: #ecfdf5;
+    background: #fef2f2; /* Very pale red/rose */
+    color: #b91c1c;      /* Deep red */
     font-size: 0.8rem;
     text-decoration: none;
     font-weight: 500;
+    margin-left: 4px;
   }
 
   .empty-state {

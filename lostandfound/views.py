@@ -183,7 +183,7 @@ def admin_dashboard(request):
         "total_reports": LostItem.objects.count(),
         "lost_reports": LostItem.objects.filter(status="not_found").count(),
         "found_reports": LostItem.objects.filter(status="found").count(),
-        "claimed_reports": LostItem.objects.filter(status="claimed").count(),
+        # "claimed_reports": LostItem.objects.filter(status="claimed").count(),
         "today_reports": LostItem.objects.filter(date_lost=today).count(),
     }
     return render(request, "admin_dashboard.html", context)
@@ -200,3 +200,21 @@ def delete_item(request, pk):
     
     # If someone tries to access via GET, just redirect them back
     return redirect('admin_dashboard')
+
+# --------- EDIT ITEM ---------
+@staff_member_required
+def edit_item(request, pk):
+    item = get_object_or_404(LostItem, pk=pk)
+    
+    if request.method == 'POST':
+        # "instance=item" tells Django we are UPDATING this specific item, not creating a new one
+        form = LostItemForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Item updated successfully.")
+            return redirect('admin_dashboard')
+    else:
+        # Pre-fill the form with the existing data
+        form = LostItemForm(instance=item)
+    
+    return render(request, 'lostandfound/edit_item.html', {'form': form, 'item': item})

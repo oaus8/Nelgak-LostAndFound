@@ -10,4 +10,5 @@ urlpatterns = [
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),  
     path('logout/', views.user_logout, name='user_logout'),
     path('delete-item/<int:pk>/', views.delete_item, name='delete_item'),
+    path('edit-item/<int:pk>/', views.edit_item, name='edit_item'), # New URL pattern for editing an item 
 ]
