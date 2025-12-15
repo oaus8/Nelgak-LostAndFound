@@ -68,7 +68,7 @@ def report_item(request):
             if not item.status:
                 item.status = 'not_found'
             if not item.college:
-                item.college = 'CCIS'
+                item.college = 'CCIST'
 
             item.save()
             return redirect('home')
@@ -86,12 +86,28 @@ def item_detail(request, pk):
     if request.method == "POST":
         form = ClaimForm(request.POST)
         if form.is_valid():
-            user_answer = form.cleaned_data["answer"].strip().lower()
+            # process the claim
+            claimer_name = form.cleaned_data["claimer_name"]
+            claimer_email = form.cleaned_data["claimer_email"]
+            user_input_answer = form.cleaned_data["answer"]
+            
+            user_answer = user_input_answer.strip().lower()
             correct_answer = (item.security_answer or "").strip().lower()
 
             if correct_answer and user_answer == correct_answer:
-                # owner verified
-                item.status = "found"   # or "claimed" if you prefer
+                
+                # claim vaerification successful
+                ClaimVerification.objects.create(
+                    report=item,
+                    claimer_name=claimer_name,
+                    claimer_email=claimer_email,
+                    claimer_answer=user_input_answer,
+                    verification_status='verified' 
+                )
+                # *************************************************
+
+                # owner verified - mark item as found
+                item.status = "found"
                 item.save()
 
                 messages.success(
@@ -100,6 +116,17 @@ def item_detail(request, pk):
                 )
                 return redirect("item_detail", pk=item.pk)
             else:
+                
+                # --- claim verification failed
+                ClaimVerification.objects.create(
+                    report=item,
+                    claimer_name=claimer_name,
+                    claimer_email=claimer_email,
+                    claimer_answer=user_input_answer,
+                    verification_status='rejected' 
+                )
+                # *************************************************
+                
                 messages.error(request, "Incorrect answer. Please try again.")
         else:
             messages.error(request, "Please correct the errors in the form.")
